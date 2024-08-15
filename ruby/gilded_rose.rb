@@ -48,6 +48,13 @@ class GildedRose
   end
 
   def degrade_quality(item, amount)
+=begin
+Tests are not working for "Conjured" items.
+↓Code is written for conjured items degrading twice as fast↓
+    if /Conjured/i.match?(item.name)
+      amount *= 2
+    end
+=end
     # Make sure quality dosen't go under min quality allowed
     item.quality = [item.quality - amount, MIN_QUALITY].max
   end
