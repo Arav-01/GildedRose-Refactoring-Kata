@@ -15,30 +15,37 @@ class GildedRose {
 
     public void updateQuality() {
         for (Item item : items) {
-            if (item.name.equals(SULFURAS)) continue;
+            switch (item.name) {
+                case SULFURAS:
+                    continue;
 
-            if (item.name.equals(AGED_BRIE)) {
-                increaseQuality(item, 1);
-            } else if (item.name.equals(BACKSTAGE_PASSES)) {
-                increaseQuality(item, 1);
-                if (item.sellIn <= 10) {
-                    increaseQuality(item, 1);
-                    if (item.sellIn <= 5) {
+                case AGED_BRIE:
+                    if (item.sellIn <= 0) {
+                        increaseQuality(item, 2);
+                    } else {
                         increaseQuality(item, 1);
                     }
-                }
-            } else {
-                degradeQuality(item, 1);
-            }
+                    break;
 
-            if (item.sellIn <= 0) {
-                if (item.name.equals(AGED_BRIE)) {
-                    increaseQuality(item, 1);
-                } else if (item.name.equals(BACKSTAGE_PASSES)) {
-                    item.quality = 0;
-                } else {
-                    degradeQuality(item, 1);
-                }
+                case BACKSTAGE_PASSES:
+                    if (item.sellIn <= 0) {
+                        item.quality = 0;
+                    } else if (item.sellIn <= 5) {
+                        increaseQuality(item, 3);
+                    } else if (item.sellIn <= 10) {
+                        increaseQuality(item, 2);
+                    } else {
+                        increaseQuality(item, 1);
+                    }
+                    break;
+
+                default:
+                    if (item.sellIn <= 0) {
+                        degradeQuality(item, 2);
+                    } else {
+                        degradeQuality(item, 1);
+                    }
+                    break;
             }
 
             item.sellIn--;
