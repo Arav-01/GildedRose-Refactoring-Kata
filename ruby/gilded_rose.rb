@@ -26,13 +26,16 @@ class GildedRose
           item.quality = 0
         else
           # Backstage passes increase 3-fold if <= 5 days left, 2-fold if <= 10 day, 1-fold otherwise
-          amount_to_increase = item.sell_in <= 5 ? 3 : item.sell_in <= 10 ? 2 : 1;
+          amount_to_increase = item.sell_in <= 5 ? 3
+                             : item.sell_in <= 10 ? 2
+                             : 1;
           increase_quality(item, amount_to_increase)
         end
 
       else
         # Non-special items decrease 1-fold until sell_in time is up, then decrease 2-fold
-        degrade_quality(item, item.sell_in <= 0 ? 2 : 1)
+        amount_to_decrease = item.sell_in <= 0 ? 2 : 1;
+        degrade_quality(item, amount_to_decrease)
       end
 
       item.sell_in -= 1
