@@ -19,18 +19,16 @@ class GildedRose
       else
         increase_quality(item, 1)
         if item.name == BACKSTAGE_PASSES
-          if item.sell_in < 11
+          if item.sell_in <= 10
             increase_quality(item, 1)
           end
-          if item.sell_in < 6
+          if item.sell_in <= 5
             increase_quality(item, 1)
           end
         end
       end
 
-      item.sell_in = item.sell_in - 1
-
-      if item.sell_in < 0
+      if item.sell_in <= 0
         if item.name != AGED_BRIE
           if item.name != BACKSTAGE_PASSES
             degrade_quality(item, 1)
@@ -41,6 +39,8 @@ class GildedRose
           increase_quality(item, 1)
         end
       end
+
+      item.sell_in = item.sell_in - 1
     end
   end
 
