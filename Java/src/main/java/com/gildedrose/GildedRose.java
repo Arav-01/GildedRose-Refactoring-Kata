@@ -20,31 +20,19 @@ class GildedRose {
                     continue;
 
                 case AGED_BRIE:
-                    if (item.sellIn <= 0) {
-                        increaseQuality(item, 2);
-                    } else {
-                        increaseQuality(item, 1);
-                    }
+                    increaseQuality(item, item.sellIn <= 0 ? 2 : 1);
                     break;
 
                 case BACKSTAGE_PASSES:
                     if (item.sellIn <= 0) {
                         item.quality = 0;
-                    } else if (item.sellIn <= 5) {
-                        increaseQuality(item, 3);
-                    } else if (item.sellIn <= 10) {
-                        increaseQuality(item, 2);
                     } else {
-                        increaseQuality(item, 1);
+                        increaseQuality(item, item.sellIn <= 5 ? 3 : item.sellIn <= 10 ? 2 : 1);
                     }
                     break;
 
                 default:
-                    if (item.sellIn <= 0) {
-                        degradeQuality(item, 2);
-                    } else {
-                        degradeQuality(item, 1);
-                    }
+                    degradeQuality(item, item.sellIn <= 0 ? 2 : 1);
                     break;
             }
 
@@ -52,11 +40,11 @@ class GildedRose {
         }
     }
 
-    private static void increaseQuality(Item item, int amount) {
-        item.quality = Math.min(item.quality + amount, MAX_QUALITY);
+    private static void increaseQuality(Item item, int incrementBy) {
+        item.quality = Math.min(item.quality + incrementBy, MAX_QUALITY);
     }
 
-    private static void degradeQuality(Item item, int amount) {
-        item.quality = Math.max(item.quality - amount, MIN_QUALITY);
+    private static void degradeQuality(Item item, int decrementBy) {
+        item.quality = Math.max(item.quality - decrementBy, MIN_QUALITY);
     }
 }
