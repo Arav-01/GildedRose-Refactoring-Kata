@@ -15,23 +15,15 @@ class GildedRose
       next if item.name == SULFURAS; # Sulfuras is legendary with quality constant 80 (no update required)
 
       if item.name != AGED_BRIE and item.name != BACKSTAGE_PASSES
-        if item.quality > MIN_QUALITY
-          item.quality = item.quality - 1
-        end
+        degrade_quality(item, 1)
       else
-        if item.quality < MAX_QUALITY
-          item.quality = item.quality + 1
-          if item.name == BACKSTAGE_PASSES
-            if item.sell_in < 11
-              if item.quality < MAX_QUALITY
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
+        increase_quality(item, 1)
+        if item.name == BACKSTAGE_PASSES
+          if item.sell_in < 11
+            increase_quality(item, 1)
+          end
+          if item.sell_in < 6
+            increase_quality(item, 1)
           end
         end
       end
@@ -41,19 +33,23 @@ class GildedRose
       if item.sell_in < 0
         if item.name != AGED_BRIE
           if item.name != BACKSTAGE_PASSES
-            if item.quality > MIN_QUALITY
-              item.quality = item.quality - 1
-            end
+            degrade_quality(item, 1)
           else
-            item.quality = item.quality - item.quality
+            item.quality = 0
           end
         else
-          if item.quality < MAX_QUALITY
-            item.quality = item.quality + 1
-          end
+          increase_quality(item, 1)
         end
       end
     end
+  end
+
+  def increase_quality(item, amount)
+    item.quality = [item.quality + amount, MAX_QUALITY].min
+  end
+
+  def degrade_quality(item, amount)
+    item.quality = [item.quality - amount, MIN_QUALITY].max
   end
 end
 
