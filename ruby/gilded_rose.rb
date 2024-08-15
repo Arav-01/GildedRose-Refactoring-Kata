@@ -3,6 +3,8 @@ class GildedRose
   SULFURAS = "Sulfuras, Hand of Ragnaros"
   AGED_BRIE = "Aged Brie"
   BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert"
+  MAX_QUALITY = 50
+  MIN_QUALITY = 0
 
   def initialize(items)
     @items = items
@@ -13,15 +15,15 @@ class GildedRose
       next if item.name == SULFURAS; # Sulfuras is legendary with quality constant 80 (no update required)
 
       if item.name != AGED_BRIE and item.name != BACKSTAGE_PASSES
-        if item.quality > 0
+        if item.quality > MIN_QUALITY
           item.quality = item.quality - 1
         end
       else
-        if item.quality < 50
+        if item.quality < MAX_QUALITY
           item.quality = item.quality + 1
           if item.name == BACKSTAGE_PASSES
             if item.sell_in < 11
-              if item.quality < 50
+              if item.quality < MAX_QUALITY
                 item.quality = item.quality + 1
               end
             end
@@ -39,14 +41,14 @@ class GildedRose
       if item.sell_in < 0
         if item.name != AGED_BRIE
           if item.name != BACKSTAGE_PASSES
-            if item.quality > 0
+            if item.quality > MIN_QUALITY
               item.quality = item.quality - 1
             end
           else
             item.quality = item.quality - item.quality
           end
         else
-          if item.quality < 50
+          if item.quality < MAX_QUALITY
             item.quality = item.quality + 1
           end
         end
