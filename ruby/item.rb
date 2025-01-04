@@ -1,7 +1,7 @@
 require_relative 'item_categorizer'
+require_relative 'item_quality_updater'
 
 class Item
-
 	MAX_QUALITY = 50
 	MIN_QUALITY = 0
 
@@ -20,26 +20,12 @@ class Item
 		# Legendary quality items remain constant at 80 - no update required))
 		return if category == ItemCategorizer::LEGENDARY;
 
-		# Wine items quality increases 2-fold if sell_in time is up, else increases 1-fold
 		if category == ItemCategorizer::WINE
-			amount_to_increase = @sell_in <= 0 ? 2 : 1
-			self.increase_quality(amount_to_increase)
-
+			ItemQualityUpdater.update_wine(self)
 		elsif category == ItemCategorizer::TICKET
-			if @sell_in > 0
-				# Ticket price increases 3-fold if <= 5 days left, 2-fold if <= 10 day, 1-fold otherwise
-				amount_to_increase = @sell_in <= 5 ? 3
-								   : @sell_in <= 10 ? 2
-								   : 1;
-				self.increase_quality(amount_to_increase)
-			else
-				@quality = 0 # Tickets expire if sell_in time is up (concert is over)
-			end
-
-		# Non-special items decrease 1-fold until sell_in time is up, then decrease 2-fold
+			ItemQualityUpdater.update_ticket(self)
 		else
-			amount_to_decrease = @sell_in <= 0 ? 2 : 1;
-			self.degrade_quality(amount_to_decrease)
+			ItemQualityUpdater.update_normal(self)
 		end
 	end
 
